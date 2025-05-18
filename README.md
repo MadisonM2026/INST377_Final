@@ -3,10 +3,8 @@ Description of your project: Our project is a site that collects and displays th
 Description of target browsers (iOS? Android? Which ones?): Our site is most compatible with IOS users.
 Link to Developer Manual: 
 
-Madi:
-	I think the zoom gave up 
+Welcome to the NutriTrack Developer Manual. This document is designed to help future developers understand, run, and continue building upon this application. 
 
-	Welcome to the NutriTrack Developer Manual. This document is designed to help future developers understand, run, and continue building upon this application. 
 Please read carefully and follow the setup instructions to get started.
 
 How to access the webiste:
