@@ -1,0 +1,101 @@
+<html>
+<head>
+  <title>NutriTrack - Calorie Calculator</title>
+  <link rel="stylesheet" href="INST377_Final.css" />
+
+  <script>
+    const SUPABASE_URL = 'https://rkwsdbzabzvaspeellap.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrd3NkYnphYnp2YXNwZWVsbGFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0MzU3MjgsImV4cCI6MjA2MzAxMTcyOH0.wURl7-CAQYUl9k2OiK0hISFYMrRdI72RWoDINuzSCRA';
+
+    let totalCalories = 0;
+
+    async function addEntry() {
+      const food = document.getElementById('food').value.trim();
+      const calories = parseInt(document.getElementById('calories').value);
+      const servings = parseInt(document.getElementById('servings').value);
+
+      if (!food || isNaN(calories) || isNaN(servings)) {
+        alert("Please fill out all fields correctly.");
+        return;
+      }
+
+      const total = calories * servings;
+      totalCalories += total;
+
+      // Add to visual log on website
+      const entry = document.createElement('div');
+      entry.classList.add('log-entry');
+      entry.textContent = `${food} - ${calories} cal x ${servings} = ${total} cal`;
+      document.getElementById('entries').appendChild(entry);
+      document.getElementById('total').textContent = totalCalories;
+
+      // Reset form
+      document.getElementById('food').value = '';
+      document.getElementById('calories').value = '';
+      document.getElementById('servings').value = '1';
+
+      // Save to Supabase
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/entries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify({
+          food,
+          calories_per_serving: calories,
+          servings,
+          total_calories: total
+        })
+      });
+
+      const result = await response.json();
+      console.log("Supabase entry result:", result);
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="logo">NutriTrack</div>
+    <nav>
+      <ul>
+        <li><a href="INST377_Final.html">Home</a></li>
+        <li><a href="INST377_Final_Tracker.html">Calorie Calculator</a></li>
+        <li><a href="INST377_Final_Search.html">Nutrition Look-up</a></li>
+        <li><a href="INST377_Final_Recipes.html">Recipes</a></li>
+        <li><a href="INST377_Final_About.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="calculator-container">
+    <h1>Calorie Calculator</h1>
+    <label for="food">What are you eating?</label>
+    <input type="text" id="food" placeholder="e.g., Grilled Chicken" />
+
+    <label for="calories">Calories per serving:</label>
+    <input type="number" id="calories" placeholder="e.g., 200" />
+
+    <label for="servings">Number of servings:</label>
+    <select id="servings">
+      <script>
+        for (let i = 1; i <= 10; i++) {
+          document.write(`<option value="${i}">${i}</option>`);
+        }
+      </script>
+    </select>
+
+    <button onclick="addEntry()">Add Entry</button>
+
+    <div class="log" id="log">
+      <h2>Food Log</h2>
+      <div id="entries"></div>
+      <div class="total">Total Calories: <span id="total">0</span></div>
+    </div>
+  </main>
+</body>
+</html>
+

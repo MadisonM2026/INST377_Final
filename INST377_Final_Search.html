@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title>NutriTrack - Nutrition Look-up</title>
+  <link rel="stylesheet" href="INST377_Final.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">NutriTrack</div>
+    <nav>
+      <ul>
+        <li><a href="INST377_Final.html">Home</a></li>
+        <li><a href="INST377_Final_Tracker.html">Calorie Calculator</a></li>
+        <li><a href="INST377_Final_Search.html">Nutrition Look-up</a></li>
+        <li><a href="INST377_Final_Recipes.html">Recipes</a></li>
+        <li><a href="INST377_Final_About.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="calculator-container">
+    <h1>Search for Food Nutrition Info</h1>
+    <input type="text" id="searchInput" placeholder="e.g., Chicken" />
+    <button onclick="searchFood()">Search</button>
+
+    <div class="log" id="result"></div>
+  </main>
+
+  <script>
+    async function searchFood() {
+      const query = document.getElementById('searchInput').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = "Searching...";
+
+      if (!query) {
+        resultDiv.innerHTML = "Please enter a food name.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1`);
+        const data = await res.json();
+
+        if (data.products.length === 0) {
+          resultDiv.innerHTML = "No results found.";
+          return;
+        }
+
+        const product = data.products[0];
+        const nutriments = product.nutriments;
+
+        resultDiv.innerHTML = `
+          <h2>${product.product_name || "Unnamed Product"}</h2>
+          <p><strong>Calories (kcal):</strong> ${nutriments["energy-kcal_100g"] || 'N/A'}</p>
+          <p><strong>Protein:</strong> ${nutriments.proteins_100g || 'N/A'}g</p>
+          <p><strong>Fat:</strong> ${nutriments.fat_100g || 'N/A'}g</p>
+          <p><strong>Carbohydrates:</strong> ${nutriments.carbohydrates_100g || 'N/A'}g</p>
+          <p><strong>Serving Size:</strong> ${product.serving_size || 'N/A'}</p>
+        `;
+      } catch (err) {
+        resultDiv.innerHTML = "An error occurred while fetching data.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
