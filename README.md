@@ -6,7 +6,6 @@ Link to Developer Manual:
 Madi:
 	I think the zoom gave up 
 
-Nick Shinbones:
 	Welcome to the NutriTrack Developer Manual. This document is designed to help future developers understand, run, and continue building upon this application. 
 Please read carefully and follow the setup instructions to get started.
 
