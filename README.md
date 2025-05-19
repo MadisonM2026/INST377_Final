@@ -13,7 +13,6 @@ How to access the website:
 
 1. Github will provide a link given the site was deployed through vercel
 2. Use this template below to view Nutritrack.
-   [Click here to view the deployed NutriTrac app](https://your-deployment-url.com)
    2a. This site uses Supabase as a container for caloric tracking, if using supa base locally, a supabase URL and ANON key will be necessary.
    (exa. # Add your SUPABASE_URL and SUPABASE_ANON_KEY in the .env file) where necessary once files are downloaded and opened.
    2b. To run locally use the live server feature on VS code to jew the site.
